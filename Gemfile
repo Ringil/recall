@@ -2,7 +2,7 @@ source "http://rubygems.org/"
 
 ruby "1.9.3"
 
-gem "heroku"
+gem "thin"
 gem "sinatra"
 gem "datamapper"
 gem "sinatra-flash"
