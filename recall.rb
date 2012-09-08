@@ -1,6 +1,5 @@
 require 'sinatra'
-require 'dm-core'
-require 'dm-migrations'
+require 'data_mapper'
 require 'time'
 require 'sinatra/flash'
 require 'sinatra/redirect_with_flash'
@@ -10,7 +9,8 @@ SITE_DESCRIPTION = "'cause you're too busy to remember"
 
 enable :sessions
 
-DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/recall.db")
+#DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/recall.db")
+DataMapper.setup(:default, "postgres://dzgnzplmcsytkn:la0bBgMSpNPSh57grtmWK48ZxN@ec2-23-21-165-167.compute-1.amazonaws.com:5432/dc7ti3stk7rvl")
 
 class Note
 	include DataMapper::Resource
@@ -20,8 +20,7 @@ class Note
 	property :created_at, DateTime
 	property :updated_at, DateTime
 end
-
-DataMapper.auto_upgrade!
+DataMapper.finalize.auto_upgrade!
 
 helpers do
 	include Rack::Utils
