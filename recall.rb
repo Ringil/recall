@@ -21,6 +21,7 @@ class Note
 	property :created_at, DateTime
 	property :updated_at, DateTime
 end
+
 DataMapper.finalize.auto_upgrade!
 
 helpers do
