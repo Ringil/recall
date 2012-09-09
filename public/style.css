@@ -111,5 +111,14 @@ p {
 	text-decoration: none;
 }
 
-.notice { color: green; }
-.error { color: red; }
+.notice { 
+    color: green; 
+}
+
+.error { 
+    color: red; 
+}
+
+.floatleft {
+    float: left;
+}
