@@ -10,8 +10,8 @@ SITE_DESCRIPTION = "'cause you're too busy to remember"
 enable :sessions
 
 #REMEMBER TO SWITCH THE DB WHEN PUSHING TO HEROKU
-#DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/recall.db")
-DataMapper.setup(:default, ENV['DATABASE_URL'])
+DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/recall.db")
+#DataMapper.setup(:default, ENV['DATABASE_URL'])
 
 class Note
 	include DataMapper::Resource

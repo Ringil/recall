@@ -119,6 +119,14 @@ p {
     color: red; 
 }
 
+.floatright {
+    float: right;
+}
+
 .floatleft {
     float: left;
+}
+
+.floatclear {
+    clear:both;
 }
