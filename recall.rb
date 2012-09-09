@@ -10,7 +10,7 @@ SITE_DESCRIPTION = "'cause you're too busy to remember"
 enable :sessions
 
 #DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/recall.db")
-DataMapper.setup(:default, "postgres://dzgnzplmcsytkn:la0bBgMSpNPSh57grtmWK48ZxN@ec2-23-21-165-167.compute-1.amazonaws.com:5432/dc7ti3stk7rvl")
+DataMapper.setup(:default, 'postgres://dzgnzplmcsytkn:la0bBgMSpNPSh57grtmWK48ZxN@ec2-23-21-165-167.compute-1.amazonaws.com:5432/dc7ti3stk7rvl')
 
 class Note
 	include DataMapper::Resource
