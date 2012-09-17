@@ -188,3 +188,8 @@ end
     redirect '/'
   end
 end
+
+post '/auth/:name/callback' do
+    auth = request.env['omniauth.auth']
+    # do whatever you want with the information!
+end
