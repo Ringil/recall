@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 #Add omniauth and email out reminders
 require 'sinatra'
 require 'pony'
@@ -13,7 +14,12 @@ SITE_DESCRIPTION = "'cause you're too busy to remember"
 TWITTER_CONSUMER_KEY = '2lvtFdUPPtVTXTftGzfPg'
 TWITTER_CONSUMER_SECRET = 'UzrUxqwxloMlV39n3cvUCSgDGJWJH2rWo6nlmks0Mo'
 
-use OmniAuth::Strategies::Twitter, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
+
+use OmniAuth::Builder do
+    provider :twitter, '2lvtFdUPPtVTXTftGzfPg', 'UzrUxqwxloMlV39n3cvUCSgDGJWJH2rWo6nlmks0Mo'
+end
+
+#use Rack::Session::Cookie
 enable :sessions
 
 #REMEMBER TO SWITCH THE DB WHEN PUSHING TO HEROKU
@@ -33,9 +39,9 @@ class User
   include DataMapper::Resource
   property :id,         Serial
   property :uid,        String
-  property :name,       String
+  property :name,       String, :required => true
   property :nickname,   String
-  property :created_at, DateTime
+  property :created_at, DateTime, :required => true
 end
 
 DataMapper.finalize.auto_upgrade!
@@ -64,8 +70,8 @@ get '/' do
 	    end 
 	    erb :home
     else
-        #'<a href="/sign_up">create an account</a> or <a href="/sign_in">sign in with Twitter</a>'
-        redirect '/auth/twitter' #This supposedly allows for auto sign in
+        erb :signin
+        #redirect '/auth/twitter' #This supposedly allows for auto sign in
     end
 end
 
@@ -151,9 +157,9 @@ get '/:id/complete' do
 end
 
 post '/:id/remind' do
-    Pony.mail :to => 'kylerob89@gmail.com'
-              :subject => 'Reminder:'
-              :body => 'Right now this is a generic reminder!'
+    Pony.mail(:to => 'kylerob89@gmail.com',
+              :subject => 'Reminder:',
+              :body => 'Right now this is a generic reminder!')
 end
 
 get '/auth/:name/callback' do
