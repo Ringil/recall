@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 #Add omniauth and email out reminders
+
 require 'sinatra'
 require 'pony'
 require 'data_mapper'
@@ -62,15 +63,18 @@ end
 
 get '/' do
     if current_user
+        =begin
 	    @notes = Note.all :order => :id.desc
 	    @title = 'All Notes'
 	    if @notes.empty?
 		    flash[:error] = 'No notes found. Add your first below.'
 	    end 
 	    erb :home
+        =end
+        current_user.id.to_s + " ... " + session[:user_id].to_s
     else
+        @title = "Sign in"
         erb :signin
-        #redirect '/auth/twitter' #This supposedly allows for auto sign in
     end
 end
 
