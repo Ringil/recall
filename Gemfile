@@ -7,6 +7,9 @@ gem "sinatra"
 gem "datamapper"
 gem "sinatra-flash"
 gem "sinatra-redirect-with-flash"
+gem "pony"
+gem "omniauth"
+gem "omniauth-twitter"
 
 
 group :development, :test do

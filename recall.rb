@@ -1,12 +1,19 @@
+#Add omniauth and email out reminders
 require 'sinatra'
+require 'pony'
 require 'data_mapper'
 require 'time'
 require 'sinatra/flash'
 require 'sinatra/redirect_with_flash'
+require 'omniauth'
+require 'omniauth-twitter'
 
 SITE_TITLE = "Recall"
 SITE_DESCRIPTION = "'cause you're too busy to remember"
+TWITTER_CONSUMER_KEY = '2lvtFdUPPtVTXTftGzfPg'
+TWITTER_CONSUMER_SECRET = 'UzrUxqwxloMlV39n3cvUCSgDGJWJH2rWo6nlmks0Mo'
 
+use OmniAuth::Strategies::Twitter, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
 enable :sessions
 
 #REMEMBER TO SWITCH THE DB WHEN PUSHING TO HEROKU
@@ -22,6 +29,15 @@ class Note
 	property :updated_at, DateTime
 end
 
+class User
+  include DataMapper::Resource
+  property :id,         Serial
+  property :uid,        String
+  property :name,       String
+  property :nickname,   String
+  property :created_at, DateTime
+end
+
 DataMapper.finalize.auto_upgrade!
 
 helpers do
@@ -29,18 +45,28 @@ helpers do
 	alias_method :h, :escape_html
 end
 
+helpers do
+  def current_user
+    @current_user ||= User.get(session[:user_id]) if session[:user_id]
+  end
+end
 
 # 
 # Application
 #
 
 get '/' do
-	@notes = Note.all :order => :id.desc
-	@title = 'All Notes'
-	if @notes.empty?
-		flash[:error] = 'No notes found. Add your first below.'
-	end 
-	erb :home
+    if current_user
+	    @notes = Note.all :order => :id.desc
+	    @title = 'All Notes'
+	    if @notes.empty?
+		    flash[:error] = 'No notes found. Add your first below.'
+	    end 
+	    erb :home
+    else
+        #'<a href="/sign_up">create an account</a> or <a href="/sign_in">sign in with Twitter</a>'
+        redirect '/auth/twitter' #This supposedly allows for auto sign in
+    end
 end
 
 post '/' do
@@ -122,4 +148,37 @@ get '/:id/complete' do
 	else
 		redirect '/', :error => 'Error marking note as complete.'
 	end
+end
+
+post '/:id/remind' do
+    Pony.mail :to => 'kylerob89@gmail.com'
+              :subject => 'Reminder:'
+              :body => 'Right now this is a generic reminder!'
+end
+
+get '/auth/:name/callback' do
+  auth = request.env["omniauth.auth"]
+  user = User.first_or_create({ :uid => auth["uid"]}, {
+    :uid => auth["uid"],
+    :nickname => auth["info"]["nickname"], 
+    :name => auth["info"]["name"],
+    :created_at => Time.now })
+  session[:user_id] = user.id
+  redirect '/'
+end
+
+# any of the following routes should work to sign the user in: 
+#   /sign_up, /signup, /sign_in, /signin, /log_in, /login
+["/sign_in/?", "/signin/?", "/log_in/?", "/login/?", "/sign_up/?", "/signup/?"].each do |path|
+  get path do
+    redirect '/auth/twitter'
+  end
+end
+
+# either /log_out, /logout, /sign_out, or /signout will end the session and log the user out
+["/sign_out/?", "/signout/?", "/log_out/?", "/logout/?"].each do |path|
+  get path do
+    session[:user_id] = nil
+    redirect '/'
+  end
 end
