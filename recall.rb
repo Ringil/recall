@@ -64,7 +64,12 @@ end
 
 get '/' do
     if current_user
-        current_user.id.to_s + " ... " + session[:user_id].to_s
+        @notes = Note.all :order => :id.desc
+	    @title = 'All Notes'
+	    if @notes.empty?
+		    flash[:error] = 'No notes found. Add your first below.'
+	    end 
+	    erb :home
     else
         @title = "Sign in"
         erb :signin
