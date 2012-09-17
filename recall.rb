@@ -8,19 +8,19 @@ require 'sinatra/flash'
 require 'sinatra/redirect_with_flash'
 require 'omniauth'
 require 'omniauth-twitter'
+require 'openid'
 
 SITE_TITLE = "Recall"
 SITE_DESCRIPTION = "'cause you're too busy to remember"
 TWITTER_CONSUMER_KEY = '2lvtFdUPPtVTXTftGzfPg'
 TWITTER_CONSUMER_SECRET = 'UzrUxqwxloMlV39n3cvUCSgDGJWJH2rWo6nlmks0Mo'
 
+enable :sessions
 
 use OmniAuth::Builder do
     provider :twitter, '2lvtFdUPPtVTXTftGzfPg', 'UzrUxqwxloMlV39n3cvUCSgDGJWJH2rWo6nlmks0Mo'
 end
 
-use Rack::Session::Cookie
-enable :sessions
 
 #REMEMBER TO SWITCH THE DB WHEN PUSHING TO HEROKU
 #DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/recall.db")
@@ -39,9 +39,9 @@ class User
   include DataMapper::Resource
   property :id,         Serial
   property :uid,        String
-  property :name,       String, :required => true
+  property :name,       String
   property :nickname,   String
-  property :created_at, DateTime, :required => true
+  property :created_at, DateTime
 end
 
 DataMapper.finalize.auto_upgrade!
@@ -187,9 +187,4 @@ end
     session[:user_id] = nil
     redirect '/'
   end
-end
-
-post '/auth/:name/callback' do
-    auth = request.env['omniauth.auth']
-    # do whatever you want with the information!
 end
