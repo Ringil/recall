@@ -17,7 +17,7 @@ TWITTER_CONSUMER_SECRET = 'UzrUxqwxloMlV39n3cvUCSgDGJWJH2rWo6nlmks0Mo'
 enable :sessions
 
 use OmniAuth::Builder do
-    provider :twitter, TWITTER_CONSUMER_SECRET, TWITTER_CONSUMER_KEY
+    provider :twitter, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
 end
 
 
