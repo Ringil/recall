@@ -29,6 +29,7 @@ DataMapper.setup(:default, ENV['DATABASE_URL'])
 class Note
 	include DataMapper::Resource
 	property :id, Serial
+    #property :owner, Text, :required => true
 	property :content, Text, :required => true
 	property :complete, Boolean, :required => true, :default => false
 	property :created_at, DateTime
@@ -63,14 +64,6 @@ end
 
 get '/' do
     if current_user
-        =begin
-	    @notes = Note.all :order => :id.desc
-	    @title = 'All Notes'
-	    if @notes.empty?
-		    flash[:error] = 'No notes found. Add your first below.'
-	    end 
-	    erb :home
-        =end
         current_user.id.to_s + " ... " + session[:user_id].to_s
     else
         @title = "Sign in"
