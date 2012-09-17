@@ -10,7 +10,6 @@ gem "sinatra-redirect-with-flash"
 gem "pony"
 gem "omniauth"
 gem "omniauth-twitter"
-gem "openid"
 
 
 group :development, :test do
