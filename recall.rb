@@ -19,7 +19,7 @@ use OmniAuth::Builder do
     provider :twitter, '2lvtFdUPPtVTXTftGzfPg', 'UzrUxqwxloMlV39n3cvUCSgDGJWJH2rWo6nlmks0Mo'
 end
 
-#use Rack::Session::Cookie
+use Rack::Session::Cookie
 enable :sessions
 
 #REMEMBER TO SWITCH THE DB WHEN PUSHING TO HEROKU
