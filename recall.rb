@@ -28,12 +28,13 @@ DataMapper.setup(:default, ENV['DATABASE_URL'])
 
 class Note
 	include DataMapper::Resource
-	property :id, Serial
+	property :id, Serial, unique_index: true
     #property :owner, Text, :required => true
 	property :content, Text, :required => true
 	property :complete, Boolean, :required => true, :default => false
 	property :created_at, DateTime
 	property :updated_at, DateTime
+	belongs_to :user
 end
 
 class User
@@ -43,6 +44,7 @@ class User
   property :name,       String
   property :nickname,   String
   property :created_at, DateTime
+  has n, :notes
 end
 
 DataMapper.finalize.auto_upgrade!
@@ -64,7 +66,7 @@ end
 
 get '/' do
     if current_user
-        @notes = Note.all :order => :id.desc
+        @notes = current_user.Note.all :order => :id.desc
 	    @title = 'All Notes'
 	    if @notes.empty?
 		    flash[:error] = 'No notes found. Add your first below.'
