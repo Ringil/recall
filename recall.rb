@@ -66,7 +66,8 @@ end
 
 get '/' do
     if current_user
-        @notes = User.get(session[:user_id]).Note.all :order => :id.desc
+        #@notes = User.get(session[:user_id]).Note.all :order => :id.desc
+        @notes = Note.all :order => :id.desc
 	    @title = 'All Notes'
 	    if @notes.empty?
 		    flash[:error] = 'No notes found. Add your first below.'
