@@ -28,7 +28,7 @@ DataMapper.setup(:default, ENV['DATABASE_URL'])
 
 class Note
 	include DataMapper::Resource
-	property :id, Serial, unique_index: true
+	property :id, Serial#, unique_index: true
     #property :owner, Text, :required => true
 	property :content, Text, :required => true
 	property :complete, Boolean, :required => true, :default => false
