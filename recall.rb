@@ -34,7 +34,7 @@ class Note
 	property :complete, Boolean, :required => true, :default => false
 	property :created_at, DateTime
 	property :updated_at, DateTime
-	belongs_to :user
+	#belongs_to :user
 end
 
 class User
@@ -44,7 +44,7 @@ class User
   property :name,       String
   property :nickname,   String
   property :created_at, DateTime
-  has n, :notes
+  #has n, :notes
 end
 
 DataMapper.finalize.auto_upgrade!
