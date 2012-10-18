@@ -18,3 +18,12 @@ tmp
 .yardoc
 _yardoc
 doc/
+*.css~
+
+*.rb~
+
+*.erb~
+
+*.ru~
+
+Gemfile~
